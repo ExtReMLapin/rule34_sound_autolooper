@@ -1,9 +1,13 @@
 # rule34_sound_autolooper
 
-The issue with SFM/BLENDER/R34 videos is there is always a HQ 2 sec video (withou sound) and a LQ 15 sec video with sound
+
+![](https://i.imgur.com/tEkDwhO.png)
 
 
-This small script takes the audio from the LQ video, loops the HQ video the correct N of time (**WITHOUT ANY RE-ENCODING**) and stick the audio from the LQ video to it.
+The issue with SFM/BLENDER/R34 videos is there is always a HQ 2 sec video (without sound) and a LQ 15 sec video with sound
+
+
+This small script takes the audio from the LQ video, loops the HQ video the correct N of time (**WITHOUT ANY REENCODING**) and stick the audio from the LQ video to it.
 
 
 
@@ -16,6 +20,8 @@ then run the following command :
 
 
 `lua.exe main.lua your_hq_video.mp4 your_lq_video.mp4`
+
+order of the video doesn't really matter, the LQ should just be longer than the HQ one
 
 your lua exe can vary, and **it was only tested on windows with mp4 files**
 
