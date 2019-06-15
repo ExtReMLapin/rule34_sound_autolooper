@@ -28,3 +28,21 @@ your lua exe can vary, and **it was only tested on windows with mp4 files**
 
 
 There may be issues with local names (you know, the ---->.\\<----my_local_video.mp4 thing) so i applied a dirty hotfix to it.
+
+
+
+How to use : 
+
+1) Get your fresh HQ video from patreon
+
+2) Wait few hours/days
+
+3) Get the LQ version with sound from R34
+
+4) Use this tool to get a superior version with sound
+
+5) Use MadVR+SVP
+
+6) ???
+
+7) Profit
