@@ -30,7 +30,7 @@ end
 
 local ffmpeg_cmd = "ffmpeg -y -hide_banner"
 local ffmpeg_cmd_no_error = "ffmpeg -y -hide_banner 2>&1"
-local tmp_output_audio = "tmp_output_audio.aac"
+local tmp_output_audio = "tmp_output_audio.m4a"
 local tmp_file_list = "tmp_concat_list.txt"
 
 if (#arg ~= 2) then
@@ -73,12 +73,15 @@ local video_sourceHQ = {path = input_videoHQ, duration = getfile_duration(input_
 
 local video_sourceLQ_sound = {path = input_videoLQ_sound, duration = getfile_duration(input_videoLQ_sound)}
 
+
 print("HQ Video : ", video_sourceHQ.path, " Duration : ", video_sourceHQ.duration)
 print("LQ Video with sound : ", video_sourceLQ_sound.path, " Duration : ", video_sourceLQ_sound.duration)
 
 if ( video_sourceHQ.duration > video_sourceLQ_sound.duration) then
-	print("The duration of the LQ sound video shouldn't be greater than the duration of the HQ video")
-	return
+	print("The duration of the LQ sound video shouldn't be greater than the duration of the HQ video, switching them")
+	local tmp = video_sourceHQ
+	video_sourceHQ = video_sourceLQ_sound
+	video_sourceLQ_sound = tmp
 end
 
 
@@ -100,7 +103,7 @@ detected_required_loops = math.round(detected_required_loops)
 
 -- os capture is used to not spam the console
 print("Extracting audio from LQ video")
-os.capture(string.format("%s -i \"%s\" -vn -acodec copy \"%s\"", ffmpeg_cmd, video_sourceLQ_sound.path, tmp_output_audio))
+os.capture(string.format("%s -i \"%s\" -vn -acodec aac \"%s\"", ffmpeg_cmd, video_sourceLQ_sound.path, tmp_output_audio))
 
 
 print("Creating concat list")
