@@ -1,2 +1,23 @@
 # rule34_sound_autolooper
-It takes the sound from a LQ long (looped) video, and apply it to a HQ video after looping it X times
+
+The issue with SFM/BLENDER/R34 videos is there is always a HQ 2 sec video (withou sound) and a LQ 15 sec video with sound
+
+
+This small script takes the audio from the LQ video, loops the HQ video the correct N of time (**WITHOUT ANY RE-ENCODING**) and stick the audio from the LQ video to it.
+
+
+
+You'll need Lua to run it, for windows you can get it [here](http://luabinaries.sourceforge.net/download.html)
+
+For windows, just get the binaries, don't download the source code.
+
+
+then run the following command : 
+
+
+`lua.exe main.lua your_hq_video.mp4 your_lq_video.mp4`
+
+your lua exe can vary, and it was only tested on windows with mp4 files
+
+
+There may be issues with local names (you know, the ---->.<----my_local_video.mp4 thing) so i applied a dirty hotfix to it.
