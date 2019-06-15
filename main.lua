@@ -1,3 +1,6 @@
+-- usage : lua main.lua hq_video_with_no_sound.mp4 lq_video_with_sound.mp4
+
+
 function os.capture(cmd, raw)
 	local f = assert(io.popen(cmd, 'r'))
 	local s = assert(f:read('*a'))
@@ -19,19 +22,29 @@ function math.round( num, idp )
 	return math.floor( num * mult + 0.5 ) / mult
 end
 
+function string.startWith( String, Start )
+
+	return string.sub( String, 1, string.len( Start ) ) == Start
+
+end
+
 
 local ffmpeg_cmd = "ffmpeg -y -hide_banner 2>&1"
 local tmp_output_audio = "tmp_output_audio.aac"
 local tmp_file_list = "tmp_concat_list.txt"
-local input_videoHQ;
-local input_videoLQ_sound;
 
 -- lua script.lua video.mp4 sound.mp3/mp4
---input_videoHQ = arg[3]
---input_videoLQ_sound = arg[3]
+local input_videoHQ = arg[1]
+local input_videoLQ_sound = arg[2]
 
-input_videoHQ = "video.mp4"
-input_videoLQ_sound = "sound.mp4"
+
+if (string.startWith(input_videoHQ, ".\\")) then
+	input_videoHQ = string.sub(input_videoHQ, 3, string.len(input_videoHQ))
+end
+
+if (string.startWith(input_videoLQ_sound, ".\\")) then
+	input_videoLQ_sound = string.sub(input_videoLQ_sound, 3, string.len(input_videoLQ_sound))
+end
 
 
 local function getfile_duration(file_name)
@@ -80,10 +93,11 @@ detected_required_loops = math.round(detected_required_loops)
 --ffmpeg -i sound.mp4 -vn -acodec copy output_audio.aac
 
 -- os capture is used to not spam the console
+print("Extracting audio from LQ video")
 os.capture(string.format("%s -i \"%s\" -vn -acodec copy \"%s\"", ffmpeg_cmd, video_sourceLQ_sound.path, tmp_output_audio))
 
 
-
+print("Creating concat list")
 local file_content = string.format("file \'%s\'\n",video_sourceHQ.path)
 file_content = string.rep(file_content,detected_required_loops )
 
@@ -94,7 +108,13 @@ file:close()
 
 --ffmpeg -f concat -i .\tmp_concat_list.txt -i .\tmp_output_audio.aac -c copy output.mp4
 
-os.capture(string.format("%s -f concat -i \"%s\" -i \"%s\" -c copy \"%s\"", ffmpeg_cmd, tmp_file_list, tmp_output_audio, "HQ_Plus_sound" .. video_sourceHQ.path))
+print("Building video")
+local output_name = "HQ" .. video_sourceHQ.path
+os.capture(string.format("%s -f concat -i \"%s\" -i \"%s\" -c copy \"%s\"", ffmpeg_cmd, tmp_file_list, tmp_output_audio, output_name))
 
+print("Removing temp files")
 os.remove(tmp_output_audio)
 os.remove(tmp_file_list)
+
+
+print("Done !")
