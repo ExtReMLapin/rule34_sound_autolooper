@@ -1,7 +1,7 @@
 # rule34_sound_autolooper
 
 
-![](https://i.imgur.com/tEkDwhO.png)
+![](https://i.imgur.com/Cnqzn2U.png)
 
 ![](https://i.imgur.com/ejAik0W.gif)
 
