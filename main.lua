@@ -28,10 +28,16 @@ function string.startWith( String, Start )
 
 end
 
-
-local ffmpeg_cmd = "ffmpeg -y -hide_banner 2>&1"
+local ffmpeg_cmd = "ffmpeg -y -hide_banner"
+local ffmpeg_cmd_no_error = "ffmpeg -y -hide_banner 2>&1"
 local tmp_output_audio = "tmp_output_audio.aac"
 local tmp_file_list = "tmp_concat_list.txt"
+
+if (#arg ~= 2) then
+	print("usage : lua main.lua hq_video.mp4 lq_sound_video.mp4")
+	return
+
+end
 
 -- lua script.lua video.mp4 sound.mp3/mp4
 local input_videoHQ = arg[1]
@@ -48,7 +54,7 @@ end
 
 
 local function getfile_duration(file_name)
-	local command = os.capture(string.format("%s -i \"%s\"", ffmpeg_cmd, file_name))
+	local command = os.capture(string.format("%s -i \"%s\"", ffmpeg_cmd_no_error, file_name))
 
 	local durationPos = assert(string.find(command, "Duration:"))
 	local durationEnd = assert(string.find(command, ",", durationPos))
