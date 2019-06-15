@@ -26,4 +26,4 @@ order of the video doesn't really matter, the LQ should just be longer than the 
 your lua exe can vary, and **it was only tested on windows with mp4 files**
 
 
-There may be issues with local names (you know, the ---->.<----my_local_video.mp4 thing) so i applied a dirty hotfix to it.
+There may be issues with local names (you know, the ---->.\\<----my_local_video.mp4 thing) so i applied a dirty hotfix to it.
