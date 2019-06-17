@@ -22,9 +22,9 @@ then run the following command :
 
 `lua.exe main.lua your_hq_video.mp4 your_lq_video.mp4`
 
-order of the video doesn't really matter, the LQ should just be longer than the HQ one
+order of the video doesn't really matter, the LQ video duration should just be longer than the HQ one
 
-your lua exe can vary, and **it was only tested on windows with mp4 files**
+your lua exe can vary, the whole process can fail because of the audio codec, it may be supported by webm and not by MP4 container
 
 
 There may be issues with local names (you know, the ---->.\\<----my_local_video.mp4 thing) so i applied a dirty hotfix to it.
