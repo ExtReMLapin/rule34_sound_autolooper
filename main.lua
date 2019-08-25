@@ -121,9 +121,6 @@ print("Building video")
 local filename = video_sourceHQ.path:match("[^/]*$")
 local output_name = video_sourceHQ.path:gsub("[^/]*$", "HQ" .. filename, 1)
 
-print(filename, output_name)
-
-print(string.format("%s -f concat -safe 0 -i \"%s\" -i \"%s\"  -c:v copy -map 0:v:0 -map 1:a:0  \"%s\"", ffmpeg_cmd, tmp_file_list, tmp_output_audio, output_name))
 os.capture(string.format("%s -f concat -safe 0 -i \"%s\" -i \"%s\"  -c:v copy -map 0:v:0 -map 1:a:0  \"%s\"", ffmpeg_cmd, tmp_file_list, tmp_output_audio, output_name))
 print("Removing temp files")
 os.remove(tmp_output_audio)
