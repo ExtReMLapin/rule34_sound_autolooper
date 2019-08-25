@@ -22,7 +22,9 @@ then run the following command :
 
 `lua.exe main.lua your_hq_video.mp4 your_lq_video.mp4`
 
-order of the video doesn't really matter, the LQ video duration should just be longer than the HQ one
+**or just drag n drop the two video files on `r34_converter.bat`**
+
+order of the videos files doesn't really matter, the LQ video duration should just be longer than the HQ one
 
 your lua exe can vary, the whole process can fail because of the audio codec, it may be supported by webm and not by MP4 container
 
