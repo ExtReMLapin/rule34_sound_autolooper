@@ -3,10 +3,11 @@
 
 [**ffmpeg needs to be installed and in your PATH**](https://www.youtube.com/watch?v=qjtmgCb8NcE)
 
+![](https://i.imgur.com/exZqOjV.gif)
 
 ![](https://i.imgur.com/Cnqzn2U.png)
 
-![](https://i.imgur.com/ejAik0W.gif)
+
 
 The issue with SFM/BLENDER/R34 videos is there is always a HQ 2 sec video (without sound) and a LQ 15 sec video with sound
 
