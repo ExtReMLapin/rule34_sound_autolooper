@@ -1,6 +1,9 @@
 # rule34_sound_autolooper
 
 
+[**ffmpeg needs to be installed and in your PATH**](https://www.youtube.com/watch?v=qjtmgCb8NcE)
+**Lua needs to be installed** 
+
 ![](https://i.imgur.com/Cnqzn2U.png)
 
 ![](https://i.imgur.com/ejAik0W.gif)
