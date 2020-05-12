@@ -34,7 +34,7 @@ local tmp_output_audio = "tmp_output_audio.m4a"
 local tmp_file_list = "tmp_concat_list.txt"
 
 if (#arg ~= 2) then
-	print("usage : lua main.lua hq_video.mp4 lq_sound_video.mp4")
+	print("usage : r34HQ_converter.exe hq_video.mp4 lq_sound_video.mp4")
 	return
 
 end
