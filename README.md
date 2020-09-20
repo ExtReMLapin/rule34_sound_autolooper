@@ -3,6 +3,8 @@
 
 [**ffmpeg needs to be installed and in your PATH**](https://www.youtube.com/watch?v=qjtmgCb8NcE)
 
+It internally also uses ffprobe (shipped with ffmpeg).
+
 ![](https://i.imgur.com/exZqOjV.gif)
 
 ![](https://i.imgur.com/Cnqzn2U.png)
