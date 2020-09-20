@@ -28,15 +28,17 @@ function string.startWith( String, Start )
 
 end
 
-local ffmpeg_cmd = "ffmpeg -y -hide_banner"
-local ffmpeg_cmd_no_error = "ffmpeg -y -hide_banner 2>&1"
+local ffmpeg_cmd = "ffmpeg  -v error -y -hide_banner"
+--local ffmpeg_cmd_no_error = "ffmpeg -y -hide_banner 2>&1"
+local ffprobe_cmd_time = "ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1"
+local ffprobe_cmd_resolution = "ffprobe -v error -hide_banner -show_entries stream=width,height -of default=noprint_wrappers=1:nokey=1"
+local ffprobe_cmd_checkifaudio = "ffprobe -show_streams -select_streams a -loglevel error "
 local tmp_output_audio = "tmp_output_audio.m4a"
 local tmp_file_list = "tmp_concat_list.txt"
 
 if (#arg ~= 2) then
 	print("usage : r34HQ_converter.exe hq_video.mp4 lq_sound_video.mp4")
 	return
-
 end
 
 -- lua script.lua video.mp4 sound.mp3/mp4
@@ -54,31 +56,62 @@ end
 
 
 local function getfile_duration(file_name)
-	local command = os.capture(string.format("%s -i \"%s\"", ffmpeg_cmd_no_error, file_name))
+	local commandRet = os.capture(string.format("%s \"%s\"", ffprobe_cmd_time, file_name))
+	return tonumber(commandRet)
+end
 
-	local durationPos = assert(string.find(command, "Duration:"))
-	local durationEnd = assert(string.find(command, ",", durationPos))
-	local duration = string.sub(command, durationPos + 10, durationEnd - 1)
-	-- result is something like "00:00:01.27"
+local function getvideo_quality(file_name)
+	local commandRet = os.capture(string.format("%s \"%s\"", ffprobe_cmd_resolution, file_name))
 
-	-- fuck any video > 99 hours, now parsing the value
-	local sec = tonumber(string.sub(duration, 7, string.len(duration)))
-	sec = sec + tonumber(string.sub(duration, 4, 5)) * 60
-	sec = sec + tonumber(string.sub(duration, 1, 2)) * 3600
-	return sec
+	local nLinepos = string.find(commandRet, " ")
+	local w = tonumber(commandRet:sub(1,nLinepos-1))
+	local h = commandRet:sub(nLinepos + 1)
+	return w * h
+end
+
+local function hasfile_audio(file_name)
+	local commandRet = os.capture(string.format("%s \"%s\"", ffprobe_cmd_checkifaudio, file_name))
+	print("commandRet size = " .. #commandRet)
+	return #commandRet > 1
 end
 
 
-local video_sourceHQ = {path = input_videoHQ:gsub("\\", "/"), duration = getfile_duration(input_videoHQ)}
 
-local video_sourceLQ_sound = {path = input_videoLQ_sound:gsub("\\", "/"), duration = getfile_duration(input_videoLQ_sound)}
+local video_sourceHQ = {
+	path = input_videoHQ:gsub("\\", "/"),
+	duration = getfile_duration(input_videoHQ),
+	resolution = getvideo_quality(input_videoHQ),
+	hasaudio = hasfile_audio(input_videoHQ)
+}
 
+local video_sourceLQ_sound = {
+	path = input_videoLQ_sound:gsub("\\", "/"),
+	duration = getfile_duration(input_videoLQ_sound),
+	resolution = getvideo_quality(input_videoLQ_sound),
+	hasaudio = hasfile_audio(input_videoLQ_sound)
+}
 
-print("HQ Video : ", video_sourceHQ.path, " Duration : ", video_sourceHQ.duration)
-print("LQ Video with sound : ", video_sourceLQ_sound.path, " Duration : ", video_sourceLQ_sound.duration)
+print("HQ Video : ")
+for k, v in pairs(video_sourceHQ) do print("\t" .. k .. " : " .. tostring(v)) end
 
-if ( video_sourceHQ.duration > video_sourceLQ_sound.duration) then
-	print("The duration of the LQ sound video shouldn't be greater than the duration of the HQ video, switching them")
+print("-----------------------------------------------------------------------")
+
+print("LQ Video with sound : ")
+for k, v in pairs(video_sourceLQ_sound) do print("\t" .. k .. " : " .. tostring(v)) end
+
+if video_sourceHQ.hasaudio == false then
+	if video_sourceLQ_sound.hasaudio == false then print("No audio on both files.") end
+	-- all good, good order
+elseif (math.abs(video_sourceHQ.duration - video_sourceLQ_sound.duration) < 0.5) then -- more or less equal time
+	if video_sourceHQ.resolution < video_sourceLQ_sound.resolution then
+		print("The resolution of the LQ sound video shouldn't be greater than the duration of the HQ video, swapping them")
+		local tmp = video_sourceHQ
+		video_sourceHQ = video_sourceLQ_sound
+		video_sourceLQ_sound = tmp
+	end
+elseif (video_sourceHQ.duration >  video_sourceLQ_sound.duration ) then
+	-- if video declared as "hq" is clearly longer then "lq" supposed one, then there is clearly an issue and they need to be swaped
+	print("The duration of the LQ sound video shouldn't be greater than the duration of the HQ video, swapping them")
 	local tmp = video_sourceHQ
 	video_sourceHQ = video_sourceLQ_sound
 	video_sourceLQ_sound = tmp
@@ -92,7 +125,7 @@ local decimal_part = math.fmod(detected_required_loops, 1)
 if (decimal_part > 0.15 and decimal_part < 0.85) then
 	print("The number of required loops is " .. detected_required_loops)
 	print("The decimal part is too significant and cannot be rounded up")
-	return
+	--return
 end
 
 detected_required_loops = math.round(detected_required_loops)
